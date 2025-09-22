@@ -1,26 +1,29 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import api from "../services/api";
 
-const Login = ({ onLogin }) => {
+const Signup = ({ onSignup }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/users/login", { username, password });
-      const token = res.data.token;
-      onLogin(token);
+      await api.post("/users", { username, password });
+      setSuccess(true);
+      onSignup(); // redirect to login
     } catch {
-      alert("Invalid username or password");
+      alert("Error creating user");
     }
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <div className="card p-4 shadow" style={{ width: "400px" }}>
-        <h3 className="text-center mb-3">Login</h3>
+        <h3 className="text-center mb-3">Signup</h3>
+        {success && (
+          <div className="alert alert-success">Account created! Please login.</div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <input
@@ -42,14 +45,11 @@ const Login = ({ onLogin }) => {
               required
             />
           </div>
-          <button className="btn btn-primary w-100">Login</button>
+          <button className="btn btn-success w-100">Signup</button>
         </form>
-        <p className="mt-3 text-center">
-          Don’t have an account? <Link to="/signup">Signup</Link>
-        </p>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Signup;

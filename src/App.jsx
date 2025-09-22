@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Items from "./pages/Items";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
@@ -24,7 +25,11 @@ const App = () => {
       {token && <Navbar onLogout={handleLogout} />}
       <Routes>
         {!token ? (
-          <Route path="*" element={<Login onLogin={handleLogin} />} />
+          <>
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/signup" element={<Signup onSignup={() => {}} />} />
+            <Route path="*" element={<Navigate to="/login" />} />
+          </>
         ) : (
           <>
             <Route path="/items" element={<Items token={token} />} />
